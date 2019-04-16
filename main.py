@@ -241,7 +241,7 @@ def getKbbPrices(car_dicts):
 
         kbb_url = "https://www.kbb.com/{}/{}/{}/sxt-coupe-2d/?intent=buy-used&mileage={}&pricetype=retail&condition=good".format(car["make"], car["model"], car["year"],
         trim ,car["truecar_miles"])
-
+        car_dicts[index]["kbb_url"] = kbb_url
         resp = requests.get(kbb_url).text
 
         key = ";price="
@@ -266,7 +266,8 @@ def getResults(car_dicts):
             "Truecar Price": car["truecar_price"],
             "Mileage": car["truecar_miles"],
             "Truecar URL": car["car_url"],
-            "Carfax URL": car["carfax_url"]
+            "Carfax URL": car["carfax_url"],
+            "Kbb URL": car["kbb_url"]
         }
         new_car_dict["Price Delta"] = int(new_car_dict["Truecar Price"]) - int(new_car_dict["Kbb Price"])
         new_list.append(new_car_dict)
