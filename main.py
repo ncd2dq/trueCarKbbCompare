@@ -1,5 +1,5 @@
 '''
-This module provides the ability to compare cars on truecar.com to their KBB value, filtering by No accidents and No Damage and non-rental on their carfax report
+This module provides the ability to compare cars on truecar.com to their KBB value, filtering by No accidents and No Damage on their carfax report
 '''
 
 year_min = input("Year Minimum -> ") #'2017'
@@ -339,9 +339,12 @@ if __name__ == "__main__":
 
         print("Found {} cars".format(len(slimmed_data)))
         with open("PriceVariants.txt", "w") as f:
-            for car in slimmed_data:
-                f.write(str(car))
-                f.write("\n")
+            if len(slimmed_data) == 0:
+                f.write("No cars matched criterion")
+            else:
+                for car in slimmed_data:
+                    f.write(str(car))
+                    f.write("\n")
 
     except Exception as e:
         print(e)
