@@ -149,6 +149,10 @@ def getCarFaxUrl(url: str) -> Dict:
 def filterCarFax(carFaxDict: Dict) -> Dict:
     '''
     Attempts to check carfax url against filters
+    
+    @param Dict carFaxDict: A dictionary that should contain a carfax_url entry
+    
+    @return Dict carFaxDict: Contains a new key, CarFax Clean, that indicates if it passes all checks
     '''
     exclude = ['"Rental"']
     include = ['"No accidents reported"', '"No damage reported"']
@@ -172,7 +176,13 @@ def filterCarFax(carFaxDict: Dict) -> Dict:
 
 def getTrueCarPricesAndSylesAndMilage(car_dicts):
     '''
+    Gathers car price, style/trim, and mileage from truecar.com for a given car and inserts them into a the dictionaries within
+    the list. 
     {'found': True, 'carfax_url': 'https://www.carfax.com/VehicleHistory/p/Report.cfx?vin=2C3CDZFJ9JH236377&amp;csearch=0&amp;partner=GAZ_0', 'CarFax Clean': True, 'car_url': 'https://www.truecar.com/used-cars-for-sale/listing/2C3CDZFJ9JH236377/2018-dodge-challenger/'}
+    
+    @param List[Dict] car_dicts: car dictionaries containing a car_url for the truecar.com link
+    
+    @return None
     '''
     # <span class="">$30,200</span>
     key_price = '<span class="">$'
@@ -202,7 +212,10 @@ def getTrueCarPricesAndSylesAndMilage(car_dicts):
 
 def getTrueCarDetails(car_dicts):
     '''
-    Scrape year make model from url
+    Scrape year make model from url of truecar.com
+    @param List[Dict] car_dicts: car dictionaries that should contain car_url
+    
+    @return None
     '''
     # https://www.truecar.com/used-cars-for-sale/listing/2C3CDZFJ9JH236377/2018-dodge-challenger/
     for index, item in enumerate(car_dicts):
@@ -220,6 +233,9 @@ def getTrueCarDetails(car_dicts):
 
 def getKbbPrices(car_dicts):
     '''
+    Attempts to match year/make/model/trim/mileage to a KBB price and inserts it into each dictionary
+    
+    # TODO instead of a mapping, have this directly feed the trim to KBB
     https://www.kbb.com/dodge/challenger/2018/sxt-coupe-2d/?intent=buy-used&mileage=15587&pricetype=retail&condition=good
 
     sxt-coupe-2d
@@ -235,6 +251,8 @@ def getKbbPrices(car_dicts):
     r-t-scat-pack-coupe-2d
     392-hemi-scat-pack-shaker-coupe-2d
     srt-392-coupe-2d
+    
+    @return None
     '''
 
     mapping = {
@@ -282,7 +300,9 @@ def getKbbPrices(car_dicts):
 
 def getResults(car_dicts):
     '''
-
+    Changes data labels to something more human readable and sorts the output by price delta (truecar price - kbb price)
+    
+    @return List[Dict] new_list: All cars with new data labels and price delta
     '''
 
     new_list = []
@@ -306,15 +326,17 @@ def getResults(car_dicts):
 
     return new_list
 
-car_urls = getTrueCarResultsUrls(year_min, make, model)
-car_dicts = checkCarFax(car_urls)
-getTrueCarPricesAndSylesAndMilage(car_dicts)
-getTrueCarDetails(car_dicts)
-getKbbPrices(car_dicts)
-slimmed_data = getResults(car_dicts)
+
+if __name__ == "__main__":
+    car_urls = getTrueCarResultsUrls(year_min, make, model)
+    car_dicts = checkCarFax(car_urls)
+    getTrueCarPricesAndSylesAndMilage(car_dicts)
+    getTrueCarDetails(car_dicts)
+    getKbbPrices(car_dicts)
+    slimmed_data = getResults(car_dicts)
 
 
-print("Found {} cars".format(len(slimmed_data)))
-for car in slimmed_data:
-    print(car)
-    print('\n')
+    print("Found {} cars".format(len(slimmed_data)))
+    for car in slimmed_data:
+        print(car)
+        print('\n')
