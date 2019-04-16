@@ -276,7 +276,7 @@ def getResults(car_dicts):
 
     return new_list
 
-car_urls = getTrueCarResultsUrls('2017', 'dodge', 'challenger')
+car_urls = getTrueCarResultsUrls(year_min, make, model)
 car_dicts = checkCarFax(car_urls)
 getTrueCarPricesAndSylesAndMilage(car_dicts)
 getTrueCarDetails(car_dicts)
