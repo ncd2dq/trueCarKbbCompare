@@ -328,15 +328,19 @@ def getResults(car_dicts):
 
 
 if __name__ == "__main__":
-    car_urls = getTrueCarResultsUrls(year_min, make, model)
-    car_dicts = checkCarFax(car_urls)
-    getTrueCarPricesAndSylesAndMilage(car_dicts)
-    getTrueCarDetails(car_dicts)
-    getKbbPrices(car_dicts)
-    slimmed_data = getResults(car_dicts)
+    try:
+        car_urls = getTrueCarResultsUrls(year_min, make, model)
+        car_dicts = checkCarFax(car_urls)
+        getTrueCarPricesAndSylesAndMilage(car_dicts)
+        getTrueCarDetails(car_dicts)
+        getKbbPrices(car_dicts)
+        slimmed_data = getResults(car_dicts)
 
 
-    print("Found {} cars".format(len(slimmed_data)))
-    for car in slimmed_data:
-        print(car)
-        print('\n')
+        print("Found {} cars".format(len(slimmed_data)))
+        for car in slimmed_data:
+            print(car)
+            print('\n')
+     except Exception as e:
+        print(e)
+        input("Press enter to quit")
