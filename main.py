@@ -168,7 +168,7 @@ def getTrueCarPricesAndSylesAndMilage(car_dicts):
     '''
     # <span class="">$30,200</span>
     key_price = '<span class="">$'
-    key_style = '"styleSlug":"'
+    key_style = '"trimSlug":"'
     key_miles = '"mileage":'
     for index, url in enumerate(car_dicts):
         resp = requests.get(url["car_url"]).text
@@ -230,14 +230,34 @@ def getKbbPrices(car_dicts):
     '''
 
     mapping = {
-    "sxt-coupe-2d": ['sxt-rwd-automatic'],
-    "sxt-plus-coupe-2d": ['sxt-plus-automatic', 'sxt-plus-rwd-automatic'],
+    "sxt-coupe-2d": ['sxt'],
+    "sxt-plus-coupe-2d": ['sxt-plus'],
+    "392-hemi-scat-pack-shaker-coupe-2d": ['392-hemi-scat-pack-shaker'],
+    "gt-coupe-2d": ['gt'],
+    "r-t-coupe-2d": ['r-t'],
+    "r-t-plus-coupe-2d": ['r-t-plus'],
+    "r-t-plus-shaker-coupe-2d": ['r-t-plus-shaker'],
+    "r-t-scat-pack-coupe-2d": ['r-t-scat-pack'],
+    "srt-392-coupe-2d": ['srt-392'],
+    "t-a-392-coupe-2d": ['t-a-392'],
+    "t-a-coupe-2d": ['t-a'],
+    "t-a-plus-coupe-2d": ['t-a-plus'],
+    "r-t-shaker-coupe-2d": ['r-t-shaker']
     }
 
     for index, car in enumerate(car_dicts):
+        found = False
         for key, value in mapping.items():
-            if car["truecar_style"] in value:
-                trim = key
+            for truecarStyle in value:
+                if car["truecar_style"] == truecarStyle:
+                    trim = key
+                    found = True
+                    car_dicts[index]["trim_found"] = True
+                    break
+        if not found:
+            print("Skipping {}, could not find trim {}".format(car["car_url"], car["truecar_style"]))
+            car_dicts[index]["trim_found"] = False
+            continue
 
         kbb_url = "https://www.kbb.com/{}/{}/{}/{}/?intent=buy-used&mileage={}&pricetype=retail&condition=good".format(car["make"], car["model"], car["year"],
         trim ,car["truecar_miles"])
@@ -258,19 +278,20 @@ def getResults(car_dicts):
 
     new_list = []
     for car in car_dicts:
-        new_car_dict = {
-            "Year": car["year"],
-            "Make": car["make"],
-            "Model": car["model"],
-            "Kbb Price": car["kbb_price"],
-            "Truecar Price": car["truecar_price"],
-            "Mileage": car["truecar_miles"],
-            "Truecar URL": car["car_url"],
-            "Carfax URL": car["carfax_url"],
-            "Kbb URL": car["kbb_url"]
-        }
-        new_car_dict["Price Delta"] = int(new_car_dict["Truecar Price"]) - int(new_car_dict["Kbb Price"])
-        new_list.append(new_car_dict)
+        if car["trim_found"]:
+            new_car_dict = {
+                "Year": car["year"],
+                "Make": car["make"],
+                "Model": car["model"],
+                "Kbb Price": car["kbb_price"],
+                "Truecar Price": car["truecar_price"],
+                "Mileage": car["truecar_miles"],
+                "Truecar URL": car["car_url"],
+                "Carfax URL": car["carfax_url"],
+                "Kbb URL": car["kbb_url"]
+            }
+            new_car_dict["Price Delta"] = int(new_car_dict["Truecar Price"]) - int(new_car_dict["Kbb Price"])
+            new_list.append(new_car_dict)
 
     new_list = sorted(new_list, key= lambda car: car["Price Delta"])
 
