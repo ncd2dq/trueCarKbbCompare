@@ -338,9 +338,11 @@ if __name__ == "__main__":
 
 
         print("Found {} cars".format(len(slimmed_data)))
-        for car in slimmed_data:
-            print(car)
-            print('\n')
+        with open("PriceVariants.txt", "w") as f:
+            for car in slimmed_data:
+                f.write(str(car))
+                f.write("\n")
+
     except Exception as e:
         print(e)
         input("Press enter to quit")
