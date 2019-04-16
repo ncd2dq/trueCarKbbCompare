@@ -246,6 +246,7 @@ def getKbbPrices(car_dicts):
     }
 
     for index, car in enumerate(car_dicts):
+        print("Getting KBB price for car {}/{}".format(index + 1, len(car_dicts)))
         found = False
         for key, value in mapping.items():
             for truecarStyle in value:
@@ -304,7 +305,7 @@ getTrueCarDetails(car_dicts)
 getKbbPrices(car_dicts)
 slimmed_data = getResults(car_dicts)
 
-print(slimmed_data)
+
 print("Found {} cars".format(len(slimmed_data)))
 for car in slimmed_data:
     print(car)
