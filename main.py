@@ -1,15 +1,5 @@
-
 '''
-truecar.com > price new/used > dodge/charger/33063 > 2017-MAX > IF free car fax report (exclude accident / damage / rental)
-
-kellybluebook.com > price new/used > used > price without added option > buy from a dealer  > fair purchase price (single value)
-
-
-List top 10, sort by difference between listend and kelly blue book value, url to true car page > output a .txt doc
-
-
-# Input make / model / min year
-
+This module provides the ability to compare cars on truecar.com to their KBB value, filtering by No accidents and No Damage on their carfax report
 '''
 
 year_min = input("Year Minimum -> ") #'2017'
@@ -28,7 +18,13 @@ from typing import List, Dict
 
 def getTrueCarResultsUrls(year_min: str, make: str, model: str, max_page_tries: int=10) -> List:
     '''
-
+    Gets all the href urls to cars on all pages for a specific car
+    
+    @param str year_min: Year of car
+    @param str make: Make of car
+    @param str model: Model of car
+    @param int max_page_tries: Max page count this module will atempt to get car listings from
+    
     @return List final_href_urls: Array of urls for all car results
     '''
     list_page_url = "https://www.truecar.com/used-cars-for-sale/listings/{}/{}/year-{}-max/location-pompano-beach-fl/".format(make.lower(), model.lower(), year_min)
@@ -55,6 +51,8 @@ def getTrueCarResultsUrls(year_min: str, make: str, model: str, max_page_tries: 
 
 def getAllCarDivIndexes(resp_text: str) -> List[int]:
     '''
+    Find all div tags containing car listings / urls
+    
     @param str resp_text: the entire listing page html str
 
     @return List all_indexes: list of indexes of all car <div> tags on current page
@@ -76,6 +74,8 @@ def getAllCarDivIndexes(resp_text: str) -> List[int]:
 
 def getNextCarHref(resp_text: str, div_index: int) -> str:
     '''
+    For a given index, get the very next href
+    
     @param str resp_text: the entire listing page html str
     @param int div_index: the index location of the car listing div tag
 
@@ -97,7 +97,11 @@ def getNextCarHref(resp_text: str, div_index: int) -> str:
 
 def checkCarFax(car_urls: List[str]) -> List[Dict]:
     '''
-    Converts car_urls to dictionaries
+    Converts car_urls to dictionaries and filters out any cars that do not pass the carfax check
+    
+    @param List car_urls: A list of all car urls
+    
+    @return List[Dict]: A list of all car dictionaries for only the cars passing the carfax check
     '''
     checked_car_urls = []
     car_count = len(car_urls)
@@ -120,6 +124,10 @@ def checkCarFax(car_urls: List[str]) -> List[Dict]:
 def getCarFaxUrl(url: str) -> Dict:
     '''
     Attempts to get free carfax url
+    
+    @param str url: Url to a specific car page
+    
+    @return List carFaxUrlDict: A dictionary object that contains a link to the free carfax report
     '''
     carFaxUrlDict = {"found": False, "carfax_url": ""}
     key = "https://www.carfax.com/VehicleHistory"
