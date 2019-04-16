@@ -1,5 +1,5 @@
 '''
-This module provides the ability to compare cars on truecar.com to their KBB value, filtering by No accidents and No Damage on their carfax report
+This module provides the ability to compare cars on truecar.com to their KBB value, filtering by No accidents and No Damage and non-rental on their carfax report
 '''
 
 year_min = input("Year Minimum -> ") #'2017'
