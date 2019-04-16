@@ -206,6 +206,7 @@ def getTrueCarDetails(car_dicts):
             year, make, model = url[-last_slash:].split('-')
         except Exception as e:
             year, make, model = '2018', 'dodge', 'challenger'
+            print("Error with the following url: {}".format(url))
         car_dicts[index]["year"], car_dicts[index]["make"], car_dicts[index]["model"] = year, make, model
 
 
