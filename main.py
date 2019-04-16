@@ -239,7 +239,7 @@ def getKbbPrices(car_dicts):
             if car["truecar_style"] in value:
                 trim = key
 
-        kbb_url = "https://www.kbb.com/{}/{}/{}/sxt-coupe-2d/?intent=buy-used&mileage={}&pricetype=retail&condition=good".format(car["make"], car["model"], car["year"],
+        kbb_url = "https://www.kbb.com/{}/{}/{}/{}/?intent=buy-used&mileage={}&pricetype=retail&condition=good".format(car["make"], car["model"], car["year"],
         trim ,car["truecar_miles"])
         car_dicts[index]["kbb_url"] = kbb_url
         resp = requests.get(kbb_url).text
