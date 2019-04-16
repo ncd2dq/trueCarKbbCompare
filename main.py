@@ -341,6 +341,6 @@ if __name__ == "__main__":
         for car in slimmed_data:
             print(car)
             print('\n')
-     except Exception as e:
+    except Exception as e:
         print(e)
         input("Press enter to quit")
