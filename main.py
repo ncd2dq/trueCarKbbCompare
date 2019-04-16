@@ -1,5 +1,4 @@
 
-
 '''
 truecar.com > price new/used > dodge/charger/33063 > 2017-MAX > IF free car fax report (exclude accident / damage / rental)
 
@@ -283,3 +282,7 @@ getKbbPrices(car_dicts)
 slimmed_data = getResults(car_dicts)
 
 print(slimmed_data)
+print("Found {} cars".format(len(slimmed_data)))
+for car in slimmed_data:
+    print(car)
+    print('\n')
